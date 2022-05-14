@@ -1,0 +1,68 @@
+package com.server;
+
+import com.client.ChatClient;
+import com.command.NoticeCommand;
+import com.util.SocketUtil;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+
+class ServerReceiver extends Thread {
+    private final Socket socket;
+    private final InputStreamReader isr;
+    private static final NoticeCommand noticeCommand = new NoticeCommand();
+
+    ServerReceiver(Socket socket) throws IOException {
+        this.socket = socket;
+        isr = new InputStreamReader(
+                new BufferedInputStream(socket.getInputStream())
+                , StandardCharsets.UTF_8
+        );
+    }
+
+    public void run() {
+        String ip = SocketUtil.getIp(socket.getInetAddress());
+        int len;
+        char[] buffer = new char[7];
+        int limit = 10;
+
+        StringBuilder input = new StringBuilder();
+
+        try {
+            while((len=isr.read(buffer))!=-1){
+                input.append(buffer,0,len);
+
+                if (input.charAt(input.length()-1)=='\n') {
+                    if (input.length() <= limit+1) {
+                        String in = input.toString();
+
+                        ChatClient chatClient = ServerProgram.clients.get(ip);
+                        chatClient.receiveMsg(in);
+
+                        if (Objects.equals(in.strip(),"/exit")){
+                            noticeCommand.action("/notice info "+ip+" 서버와의 연결이 종료되었습니다.\n");
+
+                            if (ServerProgram.clients.containsKey(ip)){
+                                ServerProgram.clients.remove(ip);
+                            }
+
+                            socket.close();
+                            break;
+                        }
+                    }else {
+                        noticeCommand.action("/notice warn "+ip+" 메세지 길이 제한 "+limit+"자를 넘겼습니다.\n");
+                    }
+                    input.setLength(0);
+                }
+            }
+            isr.close();
+
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
