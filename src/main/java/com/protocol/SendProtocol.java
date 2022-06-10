@@ -3,7 +3,6 @@ package com.protocol;
 import com.util.SocketUtil;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class SendProtocol extends CommonProtocol{
     @Override
@@ -13,8 +12,8 @@ public class SendProtocol extends CommonProtocol{
         writeFile(acceptTime,prefix + msg);
     }
 
-    @Override
-    public boolean isSupport(String meta) {
-        return Objects.equals(meta,"0:");
-    }
+//    @Override
+//    public boolean isSupport(String meta) {
+//        return Objects.equals(meta,"0:");
+//    }
 }

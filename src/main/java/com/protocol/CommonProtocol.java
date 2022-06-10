@@ -9,8 +9,8 @@ import java.nio.charset.StandardCharsets;
 public abstract class CommonProtocol implements Protocol{
     @Override
     abstract public void action(String acceptTime, String msg) throws IOException;
-    @Override
-    abstract public boolean isSupport(String meta);
+//    @Override
+//    abstract public boolean isSupport(String meta);
 
     @Override
     public void writeFile(String fileName, String msg) throws IOException {

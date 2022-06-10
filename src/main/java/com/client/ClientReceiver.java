@@ -1,13 +1,13 @@
 package com.client;
 
-import com.protocol.NoticeProtocol;
 import com.protocol.Protocol;
-import com.protocol.SendProtocol;
+import com.protocol.ProtocolFactory;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.stream.Stream;
 
 class ClientReceiver extends Thread {
     private final String acceptTime;
@@ -25,6 +25,7 @@ class ClientReceiver extends Thread {
         int len;
         char[] buffer = new char[100];
         StringBuilder input = new StringBuilder();
+        ProtocolFactory pf = new ProtocolFactory();
 
         try {
             while((len=isr.read(buffer))!=-1) {
@@ -35,11 +36,14 @@ class ClientReceiver extends Thread {
                     String meta = in.substring(0,2);
                     String msg = in.substring(2,input.length());
 
-                    Protocol protocol = Stream.of(new SendProtocol(),new NoticeProtocol())
-                            .filter(p->p.isSupport(meta))
-                            .findFirst()
-                            .orElseThrow();
+//                    Protocol protocol = Stream.of(new SendProtocol(),new NoticeProtocol())
+//                            .filter(p->p.isSupport(meta))
+//                            .findFirst()
+//                            .orElseThrow();
+//
+//                    protocol.action(acceptTime,msg);
 
+                    Protocol protocol = pf.of(meta);
                     protocol.action(acceptTime,msg);
 
                     input.setLength(0);
