@@ -13,6 +13,7 @@ public class ClientProgram {
 
         Thread sender = new Thread(new ClientSender(socket,acceptTime));
         Thread receiver = new Thread(new ClientReceiver(socket,acceptTime));
+        sender.setDaemon(true);
 
         sender.start();
         receiver.start();
