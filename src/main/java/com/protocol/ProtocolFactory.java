@@ -7,7 +7,7 @@ public class ProtocolFactory {
     public Protocol of(String meta) {
         if(Objects.equals(meta,"0:")){
             return new SendProtocol();
-        }else if(Objects.equals(meta,"0:")){
+        }else if(Objects.equals(meta,"1:")){
             return new NoticeProtocol();
         }
 
