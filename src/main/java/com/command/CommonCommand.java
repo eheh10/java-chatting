@@ -9,8 +9,8 @@ import java.util.Objects;
 public abstract class CommonCommand implements Command {
     @Override
     abstract public void action(String msg) throws IOException;
-    @Override
-    abstract public boolean isSupport(String meta);
+//    @Override
+//    abstract public boolean isSupport(String meta);
 
     protected void sendToClients(String ip, String msg) throws IOException {
         if (Objects.equals(ip,"*") || Objects.equals(ip,"all")){

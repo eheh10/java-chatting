@@ -1,15 +1,13 @@
 package com.server;
 
 import com.command.Command;
-import com.command.NoticeCommand;
-import com.command.SendCommand;
+import com.command.CommandFactory;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.stream.Stream;
 
 class ServerSender extends Thread {
 
@@ -22,7 +20,7 @@ class ServerSender extends Thread {
         char[] buffer = new char[100];
 
         StringBuilder input = new StringBuilder();
-
+        CommandFactory cf = new CommandFactory();
         try {
             while((len=isr.read(buffer))!=-1){
                 input.append(buffer,0,len);
@@ -31,11 +29,12 @@ class ServerSender extends Thread {
                     String in = input.toString();
                     String cmd = in.split(" ")[0];
 
-                    Command command = Stream.of(new SendCommand(), new NoticeCommand())
-                            .filter(c->c.isSupport(cmd))
-                            .findFirst()
-                            .orElseThrow();
+//                    Command command = Stream.of(new SendCommand(), new NoticeCommand())
+//                            .filter(c->c.isSupport(cmd))
+//                            .findFirst()
+//                            .orElseThrow();
 
+                    Command command = cf.of(cmd);
                     command.action(in);
 
                     input.setLength(0);

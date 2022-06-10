@@ -1,7 +1,6 @@
 package com.command;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class SendCommand extends CommonCommand{
     @Override
@@ -14,8 +13,8 @@ public class SendCommand extends CommonCommand{
         sendToClients(ip,msg);
     }
 
-    @Override
-    public boolean isSupport(String meta) {
-        return Objects.equals(meta,"/send");
-    }
+//    @Override
+//    public boolean isSupport(String meta) {
+//        return Objects.equals(meta,"/send");
+//    }
 }

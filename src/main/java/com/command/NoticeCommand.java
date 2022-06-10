@@ -20,8 +20,8 @@ public class NoticeCommand extends CommonCommand{
         sendToClients(ip,msg);
     }
 
-    @Override
-    public boolean isSupport(String meta) {
-        return Objects.equals(meta,"/notice");
-    }
+//    @Override
+//    public boolean isSupport(String meta) {
+//        return Objects.equals(meta,"/notice");
+//    }
 }
