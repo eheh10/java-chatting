@@ -1,10 +1,12 @@
-package com.client;
+package com.client.pool;
+
+import com.client.ChatClient;
 
 import java.util.Map;
 import java.util.Set;
 
 public class Clients {
-    private Map<String,ChatClient> clients;
+    private Map<String, ChatClient> clients;
 
     public Clients(Map<String,ChatClient> clients) {
         this.clients = clients;

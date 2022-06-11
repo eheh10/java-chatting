@@ -1,6 +1,6 @@
 package com.server;
 
-import com.client.Clients;
+import com.client.pool.Clients;
 import com.command.Command;
 import com.command.CommandFactory;
 

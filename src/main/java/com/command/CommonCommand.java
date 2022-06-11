@@ -1,7 +1,7 @@
 package com.command;
 
 import com.client.ChatClient;
-import com.client.Clients;
+import com.client.pool.Clients;
 
 import java.io.IOException;
 import java.util.Objects;

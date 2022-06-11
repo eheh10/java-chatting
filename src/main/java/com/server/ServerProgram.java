@@ -1,7 +1,7 @@
 package com.server;
 
 import com.client.ChatClient;
-import com.client.Clients;
+import com.client.pool.Clients;
 import com.util.SocketUtil;
 
 import java.io.IOException;
