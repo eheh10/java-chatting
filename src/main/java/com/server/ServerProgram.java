@@ -1,16 +1,16 @@
 package com.server;
 
 import com.client.ChatClient;
+import com.client.Clients;
 import com.util.SocketUtil;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.Map;
 
 public class ServerProgram {
-    public static Map<String, ChatClient> clients = new HashMap<>();
+    public static Clients clients = new Clients(new HashMap<>());
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(7777);
