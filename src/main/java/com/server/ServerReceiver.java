@@ -33,7 +33,7 @@ class ServerReceiver extends Thread {
         String ip = SocketUtil.getIp(socket.getInetAddress());
         int len;
         char[] buffer = new char[7];
-        int limit = 10;
+        final int limit = 10;
 
         StringBuilder input = new StringBuilder();
 
