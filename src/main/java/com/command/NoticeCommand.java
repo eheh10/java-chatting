@@ -1,9 +1,15 @@
 package com.command;
 
+import com.client.Clients;
+
 import java.io.IOException;
 import java.util.Objects;
 
 public class NoticeCommand extends CommonCommand{
+    public NoticeCommand(Clients clients) {
+        super(clients);
+    }
+
     @Override
     public void action(String msg) throws IOException {
         msg = msg.replace("/notice","1:");

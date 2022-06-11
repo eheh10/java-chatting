@@ -1,8 +1,14 @@
 package com.command;
 
+import com.client.Clients;
+
 import java.io.IOException;
 
 public class SendCommand extends CommonCommand{
+    public SendCommand(Clients clients) {
+        super(clients);
+    }
+
     @Override
     public void action(String msg) throws IOException {
         msg = msg.replace("/send","0:");
