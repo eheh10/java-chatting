@@ -10,9 +10,11 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class ServerProgram {
-    public static Clients clients = new Clients(new HashMap<>());
+//    public static Clients clients = new Clients(new HashMap<>());
 
     public static void main(String[] args) throws IOException {
+        Clients clients = new Clients(new HashMap<>());
+
         ServerSocket serverSocket = new ServerSocket(7777);
 
         while(true){
@@ -27,8 +29,8 @@ public class ServerProgram {
 
             System.out.println(ip+":"+socket.getPort()+"연결");
 
-            Thread sender = new Thread(new ServerSender());
-            Thread receiver = new Thread(new ServerReceiver(socket));
+            Thread sender = new Thread(new ServerSender(clients));
+            Thread receiver = new Thread(new ServerReceiver(socket, clients));
 
             sender.start();
             receiver.start();
