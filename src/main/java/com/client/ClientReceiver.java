@@ -6,12 +6,13 @@ import com.protocol.ProtocolFactory;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 class ClientReceiver extends Thread {
     private final String acceptTime;
-    private final InputStreamReader isr;
+    private final Reader isr;
 
     ClientReceiver(Socket socket, String acceptTime) throws IOException {
         this.acceptTime = acceptTime;
