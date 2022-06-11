@@ -1,6 +1,7 @@
 package com.server;
 
 import com.client.ChatClient;
+import com.client.Clients;
 import com.command.NoticeCommand;
 import com.util.SocketUtil;
 
@@ -13,11 +14,14 @@ import java.util.Objects;
 
 class ServerReceiver extends Thread {
     private final Socket socket;
+    private Clients clients;
     private final InputStreamReader isr;
-    private static final NoticeCommand noticeCommand = new NoticeCommand();
+    private static NoticeCommand noticeCommand;
 
-    ServerReceiver(Socket socket) throws IOException {
+    ServerReceiver(Socket socket, Clients clients) throws IOException {
         this.socket = socket;
+        this.clients = clients;
+        this.noticeCommand = new NoticeCommand(clients);
         isr = new InputStreamReader(
                 new BufferedInputStream(socket.getInputStream())
                 , StandardCharsets.UTF_8
@@ -40,14 +44,14 @@ class ServerReceiver extends Thread {
                     if (input.length() <= limit+1) {
                         String in = input.toString();
 
-                        ChatClient chatClient = ServerProgram.clients.get(ip);
+                        ChatClient chatClient = clients.get(ip);
                         chatClient.receiveMsg(in);
 
                         if (Objects.equals(in.strip(),"/exit")){
                             noticeCommand.action("/notice info "+ip+" 서버와의 연결이 종료되었습니다.\n");
 
-                            if (ServerProgram.clients.containsKey(ip)){
-                                ServerProgram.clients.remove(ip);
+                            if (clients.containsKey(ip)){
+                                clients.remove(ip);
                             }
 
                             socket.close();

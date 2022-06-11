@@ -1,5 +1,6 @@
 package com.server;
 
+import com.client.Clients;
 import com.command.Command;
 import com.command.CommandFactory;
 
@@ -10,6 +11,11 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 class ServerSender extends Thread {
+    private Clients clients;
+
+    public ServerSender(Clients clients) {
+        this.clients = clients;
+    }
 
     public void run() {
         InputStream is = System.in;
@@ -34,7 +40,7 @@ class ServerSender extends Thread {
 //                            .findFirst()
 //                            .orElseThrow();
 
-                    Command command = cf.of(cmd);
+                    Command command = cf.of(cmd, clients);
                     command.action(in);
 
                     input.setLength(0);
