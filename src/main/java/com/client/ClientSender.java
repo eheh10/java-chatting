@@ -7,8 +7,8 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 class ClientSender extends Thread {
-    private final OutputStreamWriter fos;
-    private final OutputStreamWriter osw;
+    private final Writer fos;
+    private final Writer osw;
 
     ClientSender(Socket socket,String acceptTime) throws IOException {
         osw = new OutputStreamWriter(

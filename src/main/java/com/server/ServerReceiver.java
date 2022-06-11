@@ -8,6 +8,7 @@ import com.util.SocketUtil;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -15,7 +16,7 @@ import java.util.Objects;
 class ServerReceiver extends Thread {
     private final Socket socket;
     private Clients clients;
-    private final InputStreamReader isr;
+    private final Reader isr;
     private static NoticeCommand noticeCommand;
 
     ServerReceiver(Socket socket, Clients clients) throws IOException {
