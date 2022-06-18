@@ -19,15 +19,6 @@ public class ChatClient {
     }
 
     public void sendMsg(String msg) throws IOException {
-        String prefix = "";
-        boolean IsNoticeCmd = Objects.equals(msg.charAt(0),'1');
-
-        if(IsNoticeCmd){
-            prefix = SocketUtil.prefixTime()+" ";
-        }else{
-            prefix = SocketUtil.prefixTime()+" [서버] ";
-        }
-
         OutputStream os = socket.getOutputStream();
         OutputStream fos = new FileOutputStream(serverFileName,true);
 
@@ -35,12 +26,28 @@ public class ChatClient {
         os.flush();
 //        os.close(); - 닫으면 안됨
 
-        msg = msg.split(":")[1]
-                .replace("\u001B[33m","")
-                .replace("\u001B[31m","")
-                .replace("\u001B[0m","");
+        StringBuilder sendMsg = new StringBuilder();
+        String[] values = msg.split(" ");
 
-        fos.write((prefix+msg).getBytes(StandardCharsets.UTF_8));
+        sendMsg.append(SocketUtil.prefixTime()).append(" ");
+
+        if(Objects.equals(msg.charAt(0),'0')){
+            sendMsg.append("[서버]").append(" ").append(msg.substring(2));
+        }else {
+            if (msg.indexOf("INFO") != -1) {
+                sendMsg.append("[INFO]").append(" ");
+            } else if (msg.indexOf("WARN") != -1) {
+                sendMsg.append("[WARN]").append(" ");
+            }
+
+            for (int i = 1; i < values.length; i++) {
+                sendMsg.append(values[i]).append(" ");
+            }
+
+            sendMsg.setLength(sendMsg.length()-2);
+        }
+
+        fos.write(sendMsg.toString().getBytes(StandardCharsets.UTF_8));
         fos.flush();
         fos.close();
     }
