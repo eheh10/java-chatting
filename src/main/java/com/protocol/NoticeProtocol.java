@@ -7,14 +7,31 @@ import java.io.IOException;
 public class NoticeProtocol extends CommonProtocol{
     @Override
     public void action(String acceptTime, String msg) throws IOException {
-        String prefix = SocketUtil.prefixTime() + " ";
+        String[] values = msg.split(" ");
+        String prefix = SocketUtil.prefixTime();
+        StringBuilder writeMsg = new StringBuilder();
 
-        System.out.println(msg);
+        writeMsg.append(prefix).append(" ").append(msg);
+        writeMsg.setLength(writeMsg.length()-1); // \n 문자 제거
 
-        msg = msg.replace("\u001B[33m","")
-                .replace("\u001B[31m","")
-                .replace("\u001B[0m","");
-        writeFile(acceptTime, prefix + msg);
+        System.out.print(writeMsg.toString());
+
+        writeMsg.setLength(0);
+
+        writeMsg.append(prefix).append(" ");
+        if (msg.indexOf("INFO") != -1){
+            writeMsg.append("[INFO]").append(" ");
+        }else if(msg.indexOf("WARN") != -1){
+            writeMsg.append("[WARN]").append(" ");
+        }
+
+        for(int i=1; i<values.length-1; i++){
+            writeMsg.append(values[i]).append(" ");
+        }
+        writeMsg.setLength(writeMsg.length()-1); // 마지막 공백 제거
+        writeMsg.append("\n");
+
+        writeFile(acceptTime, writeMsg.toString());
     }
 
 //    @Override
