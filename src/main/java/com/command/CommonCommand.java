@@ -4,7 +4,9 @@ import com.client.ChatClient;
 import com.client.pool.Clients;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.Set;
 
 public abstract class CommonCommand implements Command {
     private Clients clients;
@@ -19,18 +21,30 @@ public abstract class CommonCommand implements Command {
 //    abstract public boolean isSupport(String meta);
 
     protected void sendToClients(String ip, String msg) throws IOException {
-        if (Objects.equals(ip,"*") || Objects.equals(ip,"all")){
-            for(String key : clients.keySet() ){
-                ChatClient chatClient = clients.get(key);
-                chatClient.sendMsg(msg);
-            }
-        }else{
-            for(String key : ip.split(",")){
-                if(clients.containsKey(key)){
-                    ChatClient chatClient = clients.get(key);
-                    chatClient.sendMsg(msg);
-                }
+        for (String key : findClientKeys(ip)) {
+            ChatClient chatClient = clients.get(key);
+            chatClient.sendMsg(msg);
+        }
+    }
+
+    private Set<String> findClientKeys(String ip) {
+
+        if (Objects.isNull(ip)) {
+            return Collections.emptySet();
+        }
+
+        if (Objects.equals(ip, "*") || Objects.equals(ip, "all")) {
+            return clients.keySet();
+        }
+
+        Set<String> findClientKeys = null;
+
+        for(String key : ip.split(",")){
+            if(clients.containsKey(key)){
+                findClientKeys.add(key);
             }
         }
+
+        return findClientKeys;
     }
 }
