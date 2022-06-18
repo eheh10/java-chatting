@@ -19,8 +19,8 @@ public class ChatClient {
     }
 
     public void sendMsg(String msg) throws IOException {
-        String prefix;
-        boolean IsNoticeCmd = Objects.equals(msg.split(":")[0],"1");
+        String prefix = "";
+        boolean IsNoticeCmd = Objects.equals(msg.charAt(0),'1');
 
         if(IsNoticeCmd){
             prefix = SocketUtil.prefixTime()+" ";
