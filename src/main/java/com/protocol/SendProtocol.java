@@ -7,9 +7,15 @@ import java.io.IOException;
 public class SendProtocol extends CommonProtocol{
     @Override
     public void action(String acceptTime, String msg) throws IOException {
-        String prefix = SocketUtil.prefixTime()+ " [서버] ";
+        StringBuilder sendMsg = new StringBuilder();
 
-        writeFile(acceptTime,prefix + msg);
+        sendMsg.append(SocketUtil.prefixTime())
+                .append(" ")
+                .append("[서버]")
+                .append(" ")
+                .append(msg);
+
+        writeFile(acceptTime,sendMsg.toString());
     }
 
 //    @Override
