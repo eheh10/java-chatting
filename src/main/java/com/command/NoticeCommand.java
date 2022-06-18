@@ -12,18 +12,28 @@ public class NoticeCommand extends CommonCommand{
 
     @Override
     public void action(String msg) throws IOException {
-        msg = msg.replace("/notice","1:");
+        String[] values = msg.split(" ");
+        String type = values[1];
+        String ip = values[2];
 
-        String type = msg.split(" ")[1];
-        String ip = msg.split(" ")[2];
+        StringBuilder sendMsg = new StringBuilder();
+        sendMsg.append("1:");
 
         if (Objects.equals(type,"info")) {
-            msg = msg.replace(" " + type + " " + ip + " ", "\u001B[33m[INFO]\u001B[0m ");
+            sendMsg.append("\u001B[33m[INFO]\u001B[0m");
         }else if (Objects.equals(type,"warn")){
-            msg = msg.replace(" " + type + " " + ip + " ", "\u001B[31m[WARN]\u001B[0m ");
+            sendMsg.append("\u001B[31m[WARN]\u001B[0m");
         }
 
-        sendToClients(ip,msg);
+        sendMsg.append(" ");
+
+        for(int i=3; i<values.length; i++){
+            sendMsg.append(values[i]).append(" ");
+        }
+        sendMsg.setLength(sendMsg.length()-1); //마지막 공백 문자 제거
+        sendMsg.append("\n");
+
+        sendToClients(ip,sendMsg.toString());
     }
 
 //    @Override
