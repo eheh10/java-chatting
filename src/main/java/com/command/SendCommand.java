@@ -11,12 +11,18 @@ public class SendCommand extends CommonCommand{
 
     @Override
     public void action(String msg) throws IOException {
-        msg = msg.replace("/send","0:");
+        String[] values = msg.split(" ");
+        String ip = values[1];
+        StringBuilder sendMsg = new StringBuilder();
 
-        String ip = msg.split(" ")[1];
-        msg = msg.replace(" "+ip+" ","");
+        sendMsg.append("0:");
 
-        sendToClients(ip,msg);
+        for(int i=2; i<values.length; i++){
+            sendMsg.append(values[i]).append(" ");
+        }
+        sendMsg.setLength(sendMsg.length()-1); //마지막 공백 문자 제거
+
+        sendToClients(ip,sendMsg.toString());
     }
 
 //    @Override
