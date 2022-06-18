@@ -25,11 +25,10 @@ public class NoticeProtocol extends CommonProtocol{
             writeMsg.append("[WARN]").append(" ");
         }
 
-        for(int i=1; i<values.length-1; i++){
+        for(int i=1; i<values.length; i++){
             writeMsg.append(values[i]).append(" ");
         }
-        writeMsg.setLength(writeMsg.length()-1); // 마지막 공백 제거
-        writeMsg.append("\n");
+        writeMsg.setLength(writeMsg.length()-2); // 마지막 공백, \n 제거
 
         writeFile(acceptTime, writeMsg.toString());
     }
