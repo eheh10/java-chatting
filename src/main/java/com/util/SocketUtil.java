@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 public class SocketUtil {
     public static String getIp(InetAddress inetAddress){
-        return (inetAddress+"").replace("/","");
+        return inetAddress.getHostAddress();
     }
 
     public static String nowTime(){
