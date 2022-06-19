@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class CommonCommand implements Command {
     private Clients clients;
@@ -37,14 +39,18 @@ public abstract class CommonCommand implements Command {
             return clients.keySet();
         }
 
-        Set<String> findClientKeys = null;
+//        Set<String> findClientKeys = new HashSet<>();
+//
+//        for(String key : ip.split(",")){
+//            if(clients.containsKey(key)){
+//                findClientKeys.add(key);
+//            }
+//        }
 
-        for(String key : ip.split(",")){
-            if(clients.containsKey(key)){
-                findClientKeys.add(key);
-            }
-        }
+        return Stream.of(ip.split(","))
+                .filter(clients::containsKey)
+                .collect(Collectors.toUnmodifiableSet());
 
-        return findClientKeys;
+//        return findClientKeys;
     }
 }
