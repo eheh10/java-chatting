@@ -31,7 +31,7 @@ public class ChatClient {
 
         ProtocolFactory pf = new ProtocolFactory();
         Protocol protocol = pf.of(msg.substring(0,2));
-        String fileMsg = protocol.getFileMsg(msg);
+        String fileMsg = protocol.getFileMsg(msg.substring(2));
 
         writeFile(fos,fileMsg);
     }
