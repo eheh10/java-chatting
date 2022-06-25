@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 class ServerSender extends Thread {
-    private Clients clients;
+    private final Clients clients;
 
     public ServerSender(Clients clients) {
         this.clients = clients;
@@ -31,7 +31,7 @@ class ServerSender extends Thread {
             while((len=isr.read(buffer))!=-1){
                 input.append(buffer,0,len);
 
-                if (input.charAt(input.length()-1)=='\n') {
+                if (buffer[len-1]=='\n') {
                     String in = input.toString();
                     String cmd = in.split(" ")[0];
 
