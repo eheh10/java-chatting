@@ -53,11 +53,9 @@ public class ChatClient {
     }
 
     public void receiveMsg(String msg) throws IOException {
-        String prefix = SocketUtil.prefixTime()+ " [클라이언트] ";
-
         OutputStream fos = new FileOutputStream(serverFileName,true);
 
-        fos.write((prefix+msg).getBytes(StandardCharsets.UTF_8));
+        fos.write(msg.getBytes(StandardCharsets.UTF_8));
 
         fos.flush();
         fos.close();

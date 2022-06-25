@@ -15,9 +15,9 @@ import java.util.Objects;
 
 class ServerReceiver extends Thread {
     private final Socket socket;
-    private Clients clients;
+    private final Clients clients;
     private final Reader isr;
-    private static NoticeCommand noticeCommand;
+    private final NoticeCommand noticeCommand;
 
     ServerReceiver(Socket socket, Clients clients) throws IOException {
         this.socket = socket;
@@ -41,33 +41,47 @@ class ServerReceiver extends Thread {
             while((len=isr.read(buffer))!=-1){
                 input.append(buffer,0,len);
 
-                if (input.charAt(input.length()-1)=='\n') {
-                    if (input.length() <= limit+1) {
-                        String in = input.toString();
-
-                        ChatClient chatClient = clients.get(ip);
-                        chatClient.receiveMsg(in);
-
-                        if (Objects.equals(in.strip(),"/exit")){
-                            noticeCommand.action("/notice info "+ip+" 서버와의 연결이 종료되었습니다.\n");
-
-                            if (clients.containsKey(ip)){
-                                clients.remove(ip);
-                            }
-
-                            socket.close();
-                            break;
-                        }
-                    }else {
-                        noticeCommand.action("/notice warn "+ip+" 메세지 길이 제한 "+limit+"자를 넘겼습니다.\n");
-                    }
-                    input.setLength(0);
+                if (buffer[len-1]!='\n') {
+                    continue;
                 }
+
+                if (input.length() > limit+1) {
+                    noticeCommand.action("/notice warn "+ip+" 메세지 길이 제한 "+limit+"자를 넘겼습니다.\n");
+                    input.setLength(0);
+                    continue;
+                }
+
+                String in = input.toString();
+
+                ChatClient chatClient = clients.get(ip);
+                chatClient.receiveMsg(processReceive(in));
+
+                if (Objects.equals(in.strip(),"/exit")){
+                    noticeCommand.action("/notice info "+ip+" 서버와의 연결이 종료되었습니다.\n");
+
+                    if (clients.containsKey(ip)){
+                        clients.remove(ip);
+                    }
+
+                    socket.close();
+                    break;
+                }
+
+                input.setLength(0);
             }
             isr.close();
 
         } catch(IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String processReceive(String in) {
+        StringBuilder receive = new StringBuilder();
+
+        return receive.append(SocketUtil.prefixTime())
+                .append(" ").append("[클라이언트]").append(" ")
+                .append(in)
+                .toString();
     }
 }
