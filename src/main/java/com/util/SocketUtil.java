@@ -19,11 +19,11 @@ public class SocketUtil {
 
     public static String prefixClient(){
         StringBuilder str = new StringBuilder();
-        return str.append(prefixTime()).append(" ").append("클라이언트").append(" ").toString();
+        return str.append(prefixTime()).append(" ").append("[클라이언트]").append(" ").toString();
     }
 
     public static String prefixServer(){
         StringBuilder str = new StringBuilder();
-        return str.append(prefixTime()).append(" ").append("서버").append(" ").toString();
+        return str.append(prefixTime()).append(" ").append("[서버]").append(" ").toString();
     }
 }
