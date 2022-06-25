@@ -29,23 +29,24 @@ public class ChatClient {
         StringBuilder sendMsg = new StringBuilder();
         String[] values = msg.split(" ");
 
+        if(Objects.equals(msg.charAt(0),'0')){
+            sendMsg.append(SocketUtil.prefixServer()).append(msg.substring(2));
+            return;
+        }
+
         sendMsg.append(SocketUtil.prefixTime()).append(" ");
 
-        if(Objects.equals(msg.charAt(0),'0')){
-            sendMsg.append("[서버]").append(" ").append(msg.substring(2));
-        }else {
-            if (msg.indexOf("INFO") != -1) {
-                sendMsg.append("[INFO]").append(" ");
-            } else if (msg.indexOf("WARN") != -1) {
-                sendMsg.append("[WARN]").append(" ");
-            }
-
-            for (int i = 1; i < values.length; i++) {
-                sendMsg.append(values[i]).append(" ");
-            }
-
-            sendMsg.setLength(sendMsg.length()-2);
+        if (msg.contains("INFO")) {
+            sendMsg.append("[INFO]").append(" ");
+        } else if (msg.contains("WARN")) {
+            sendMsg.append("[WARN]").append(" ");
         }
+
+        for (int i = 1; i < values.length; i++) {
+            sendMsg.append(values[i]).append(" ");
+        }
+
+        sendMsg.setLength(sendMsg.length()-2);
 
         fos.write(sendMsg.toString().getBytes(StandardCharsets.UTF_8));
         fos.flush();
