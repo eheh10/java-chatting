@@ -14,6 +14,13 @@ public class SendProtocol extends CommonProtocol{
         writeFile(acceptTime,sendMsg.toString());
     }
 
+    @Override
+    public String getFileMsg(String msg) {
+        return new StringBuilder().append(SocketUtil.prefixServer())
+                .append(msg.substring(2))
+                .toString();
+    }
+
 //    @Override
 //    public boolean isSupport(String meta) {
 //        return Objects.equals(meta,"0:");
