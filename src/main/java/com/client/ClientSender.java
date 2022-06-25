@@ -30,7 +30,6 @@ class ClientSender extends Thread {
         char[] buffer = new char[100];
 
         StringBuilder msg = new StringBuilder();
-        String prefix = SocketUtil.prefixTime() + " [클라이언트] ";
 
         try {
             while((len=isr.read(buffer))!=-1){
@@ -40,7 +39,7 @@ class ClientSender extends Thread {
                     String out = msg.toString();
 
                     osw.write(out);
-                    fos.write(prefix +out);
+                    fos.write(processSend(out));
 
                     fos.flush();
                     osw.flush();
@@ -55,5 +54,11 @@ class ClientSender extends Thread {
         } catch(IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String processSend(String out) {
+        StringBuilder str = new StringBuilder();
+
+        return str.append(SocketUtil.prefixClient()).append(out).toString();
     }
 }
