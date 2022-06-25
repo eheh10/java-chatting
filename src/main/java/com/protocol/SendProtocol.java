@@ -9,11 +9,7 @@ public class SendProtocol extends CommonProtocol{
     public void action(String acceptTime, String msg) throws IOException {
         StringBuilder sendMsg = new StringBuilder();
 
-        sendMsg.append(SocketUtil.prefixTime())
-                .append(" ")
-                .append("[서버]")
-                .append(" ")
-                .append(msg);
+        sendMsg.append(SocketUtil.prefixServer()).append(msg);
 
         writeFile(acceptTime,sendMsg.toString());
     }
