@@ -25,7 +25,8 @@ public abstract class CommonCommand implements Command {
     protected void sendToClients(String ip, String msg) throws IOException {
         for (String key : findClientKeys(ip)) {
             ChatClient chatClient = clients.get(key);
-            chatClient.sendMsg(msg);
+            chatClient.sendToClient(msg);
+            chatClient.writeSendMsg(msg);
         }
     }
 

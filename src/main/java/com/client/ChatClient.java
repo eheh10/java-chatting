@@ -1,13 +1,13 @@
 package com.client;
 
-import com.util.SocketUtil;
+import com.protocol.Protocol;
+import com.protocol.ProtocolFactory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 public class ChatClient {
     private String serverFileName;
@@ -18,47 +18,32 @@ public class ChatClient {
         this.socket = socket;
     }
 
-    public void sendMsg(String msg) throws IOException {
+    public void sendToClient(String msg) throws IOException {
         OutputStream os = socket.getOutputStream();
-        OutputStream fos = new FileOutputStream(serverFileName,true);
 
         os.write(msg.getBytes(StandardCharsets.UTF_8));
         os.flush();
 //        os.close(); - 닫으면 안됨
-
-        StringBuilder sendMsg = new StringBuilder();
-        String[] values = msg.split(" ");
-
-        if(Objects.equals(msg.charAt(0),'0')){
-            sendMsg.append(SocketUtil.prefixServer()).append(msg.substring(2));
-            return;
-        }
-
-        sendMsg.append(SocketUtil.prefixTime()).append(" ");
-
-        if (msg.contains("INFO")) {
-            sendMsg.append("[INFO]").append(" ");
-        } else if (msg.contains("WARN")) {
-            sendMsg.append("[WARN]").append(" ");
-        }
-
-        for (int i = 1; i < values.length; i++) {
-            sendMsg.append(values[i]).append(" ");
-        }
-
-        sendMsg.setLength(sendMsg.length()-2);
-
-        fos.write(sendMsg.toString().getBytes(StandardCharsets.UTF_8));
-        fos.flush();
-        fos.close();
     }
 
-    public void receiveMsg(String msg) throws IOException {
+    public void writeSendMsg(String msg) throws IOException {
         OutputStream fos = new FileOutputStream(serverFileName,true);
 
-        fos.write(msg.getBytes(StandardCharsets.UTF_8));
+        ProtocolFactory pf = new ProtocolFactory();
+        Protocol protocol = pf.of(msg.substring(0,2));
+        String fileMsg = protocol.getFileMsg(msg);
 
-        fos.flush();
-        fos.close();
+        writeFile(fos,fileMsg);
+    }
+
+    public void receiveFromClient(String msg) throws IOException {
+        writeFile(new FileOutputStream(serverFileName,true),msg);
+    }
+
+    private void writeFile(OutputStream os, String msg) throws IOException{
+        os.write(msg.getBytes(StandardCharsets.UTF_8));
+
+        os.flush();
+        os.close();
     }
 }
