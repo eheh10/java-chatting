@@ -77,11 +77,8 @@ class ServerReceiver extends Thread {
     }
 
     private String processReceive(String in) {
-        StringBuilder receive = new StringBuilder();
+        StringBuilder str = new StringBuilder();
 
-        return receive.append(SocketUtil.prefixTime())
-                .append(" ").append("[클라이언트]").append(" ")
-                .append(in)
-                .toString();
+        return str.append(SocketUtil.prefixClient()).append(in).toString();
     }
 }
