@@ -7,17 +7,13 @@ import java.io.IOException;
 public class SendProtocol extends CommonProtocol{
     @Override
     public void action(String acceptTime, String msg) throws IOException {
-        StringBuilder sendMsg = new StringBuilder();
-
-        sendMsg.append(SocketUtil.prefixServer()).append(msg);
-
-        writeFile(acceptTime,sendMsg.toString());
+        writeFile(acceptTime,getFileMsg(msg));
     }
 
     @Override
     public String getFileMsg(String msg) {
         return new StringBuilder().append(SocketUtil.prefixServer())
-                .append(msg.substring(2))
+                .append(msg)
                 .toString();
     }
 
