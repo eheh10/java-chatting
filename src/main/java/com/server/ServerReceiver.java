@@ -54,7 +54,7 @@ class ServerReceiver extends Thread {
                 String in = input.toString();
 
                 ChatClient chatClient = clients.get(ip);
-                chatClient.receiveMsg(processReceive(in));
+                chatClient.receiveFromClient(processReceive(in));
 
                 if (Objects.equals(in.strip(),"/exit")){
                     noticeCommand.action("/notice info "+ip+" 서버와의 연결이 종료되었습니다.\n");
